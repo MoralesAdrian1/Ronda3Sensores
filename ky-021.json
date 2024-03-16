@@ -1,0 +1,323 @@
+[
+    {
+        "id": "8e4b4b3ed338adc6",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "faa1da7b56cf682a",
+        "type": "mqtt in",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "topic": "utng/adr/ky-021",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bf0803e82877e801",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 260,
+        "y": 220,
+        "wires": [
+            [
+                "98f47a0c0613f541",
+                "2ff459ba2f7bf667"
+            ]
+        ]
+    },
+    {
+        "id": "d45627c57f519ea8",
+        "type": "mqtt out",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "topic": "utng/adr/ky-021",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bf0803e82877e801",
+        "x": 640,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "98f47a0c0613f541",
+        "type": "debug",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "4f985659fc762f76",
+        "type": "inject",
+        "z": "8e4b4b3ed338adc6",
+        "name": "temp",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "ad332f18dc155c78"
+            ]
+        ]
+    },
+    {
+        "id": "ad332f18dc155c78",
+        "type": "function",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "func": "global.set(\"switch\", !global.get(\"switch\"));\nmsg.payload=global.get(\"switch\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set(\"switch\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 320,
+        "wires": [
+            [
+                "d45627c57f519ea8"
+            ]
+        ]
+    },
+    {
+        "id": "de5a48c3ab4c1bf0",
+        "type": "ui_switch",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "e0e13c26c517ef67",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "d45627c57f519ea8"
+            ]
+        ]
+    },
+    {
+        "id": "f3547fbc4b1b0829",
+        "type": "ui_text",
+        "z": "8e4b4b3ed338adc6",
+        "group": "44a2d54dfbd8ceed",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "microfono Status:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 730,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "2ff459ba2f7bf667",
+        "type": "function",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "func": "msg.payload = msg.payload==\"true\"?\"Circuito abierto\":\"Circuito cerrado\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 140,
+        "wires": [
+            [
+                "f3547fbc4b1b0829",
+                "67d07a3ac708ceb1"
+            ]
+        ]
+    },
+    {
+        "id": "7c73a25092ae63c0",
+        "type": "postgresql",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "query": "INSERT INTO sensor_details(sensor_id,user_id,value) VALUES(9,7, '{{msg.payload}}');",
+        "postgreSQLConfig": "bff11fc8ef4ecedf",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 790,
+        "y": 180,
+        "wires": [
+            [
+                "98f47a0c0613f541"
+            ]
+        ]
+    },
+    {
+        "id": "67d07a3ac708ceb1",
+        "type": "function",
+        "z": "8e4b4b3ed338adc6",
+        "name": "",
+        "func": "msg.payload = msg.payload=='Circuito abierto'?1.0:0.0;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 160,
+        "wires": [
+            [
+                "7c73a25092ae63c0"
+            ]
+        ]
+    },
+    {
+        "id": "bf0803e82877e801",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.239.135",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e0e13c26c517ef67",
+        "type": "ui_group",
+        "name": "KY-019",
+        "tab": "ab6cc718d668e6eb",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "44a2d54dfbd8ceed",
+        "type": "ui_group",
+        "name": "ky-023",
+        "tab": "225174cb36120e36",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bff11fc8ef4ecedf",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "127.0.0.1",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "aiot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": "10",
+        "maxFieldType": "num",
+        "idle": "1000",
+        "idleFieldType": "num",
+        "connectionTimeout": "10000",
+        "connectionTimeoutFieldType": "num",
+        "user": "postgres",
+        "userFieldType": "str",
+        "password": "1234",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "ab6cc718d668e6eb",
+        "type": "ui_tab",
+        "name": "Relay",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "225174cb36120e36",
+        "type": "ui_tab",
+        "name": "Sensores",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
